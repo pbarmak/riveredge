@@ -1,0 +1,98 @@
+/*
+  River Edge — dark mode variables.
+  Loaded by RiverLea inside @media (prefers-color-scheme: dark) when the
+  stream's dark_backend is set to 'inherit'.
+  Also duplicated under html[data-riveredge-theme="dark"] in responsive.css
+  so the per-user JS toggle can override the OS preference.
+*/
+
+:root {
+/* ─── Colour name overrides ───────────────────────────────────────────────── */
+  --crm-c-gray-800: #1e2129;
+  --crm-c-gray-700: #2d3140;
+  --crm-c-gray-600: #55596a;
+  --crm-c-gray-500: #9a9ba8;
+
+/* ─── Practical colours ───────────────────────────────────────────────────── */
+  --crm-text-light-color: #f0f2f5;
+  --crm-text-dark-color: #2a2933;
+  --crm-link-color: var(--crm-c-amber);
+  --crm-link-hover-color: var(--crm-c-amber-light);
+  --crm-focus-color: var(--crm-link-color);
+  --crm-inactive-color: var(--crm-c-gray-400);
+  --crm-paper: var(--crm-c-darkest);
+
+/* ─── Backgrounds ─────────────────────────────────────────────────────────── */
+  --crm-page-bg-color: #12141a;
+  --crm-container-bg-color: #1a1d25;
+  --crm-layer1-bg-color: #21242e;
+  --crm-layer2-bg-color: #282c38;
+  --crm-drag-bg-color: var(--crm-layer2-bg-color);
+
+/* ─── Emphasis colours ────────────────────────────────────────────────────── */
+  --crm-success-color: var(--crm-c-green-dark);
+  --crm-warning-text-color: var(--crm-text-dark-color);
+  --crm-alert-warning-text-color: var(--crm-text-dark-color);
+  --crm-info-color: var(--crm-c-blue-dark);
+
+/* ─── Shadows (deeper in dark mode) ──────────────────────────────────────── */
+  --crm-shadow-block: 0 3px 18px 0 rgba(0, 0, 0, .6);
+  --crm-shadow-popup: 0 4px 24px 0 rgba(0, 0, 0, .8);
+
+/* ─── Typography ──────────────────────────────────────────────────────────── */
+  --crm-heading-bg-color: var(--crm-secondary-color);
+
+/* ─── Tables ──────────────────────────────────────────────────────────────── */
+  --crm-table-row-hover-color: var(--crm-alert-info-border-color);
+
+/* ─── Panels ──────────────────────────────────────────────────────────────── */
+  --crm-panel-border-col: var(--crm-c-gray-500);
+  --crm-panel-border: 1px;
+  --crm-panel-bg-color: var(--crm-container-bg-color);
+
+/* ─── Accordions ──────────────────────────────────────────────────────────── */
+  --crm-accordion-header-bg-active-color: var(--crm-secondary-hover-color);
+  --crm-accordion2-header-bg-active-color: var(--crm-secondary-hover-color);
+  --crm-accordion-body-bg-color: var(--crm-layer1-bg-color);
+
+/* ─── Forms ───────────────────────────────────────────────────────────────── */
+  --crm-form-block-bg-color: var(--crm-container-bg-color);
+  --crm-input-border-color: var(--crm-c-gray-500);
+  --crm-input-bg-color: #1e2129;
+
+/* ─── Tabs ────────────────────────────────────────────────────────────────── */
+  --crm-tabs-bg-color: var(--crm-layer2-bg-color);
+
+/* ─── Contact layout ──────────────────────────────────────────────────────── */
+  --crm-contact-header-bg-color: var(--crm-layer2-bg-color);
+  --crm-contact-header2-bg-color: #1a1d25;
+  --crm-contact-block-bg-color: var(--crm-container-bg-color);
+  --crm-contact-tabs-bg-color: var(--crm-layer1-bg-color);
+  --crm-contact-panel-bg-color: var(--crm-container-bg-color);
+  --crm-contact-tab-hover-bg-color: var(--crm-layer2-bg-color);
+  --crm-contact-label-bg-color: transparent;
+  --crm-contact-box-shadow: inset 0 5px 18px -5px rgba(0, 0, 0, .75);
+  --crm-contact-edit-border: 1px solid var(--crm-link-hover-color);
+
+/* ─── Dialogs ─────────────────────────────────────────────────────────────── */
+  --crm-dialog-body-bg-color: var(--crm-container-bg-color);
+  --crm-dialog-header-border-color: transparent;
+
+/* ─── Dashlets ────────────────────────────────────────────────────────────── */
+  --crm-dashlet-header-bg-color: var(--crm-layer1-bg-color);
+
+/* ─── Dropdowns ───────────────────────────────────────────────────────────── */
+  --crm-dropdown-bg-color: var(--crm-container-bg-color);
+  --crm-dropdown2-bg-color: var(--crm-container-bg-color);
+
+/* ─── Notifications ───────────────────────────────────────────────────────── */
+  --crm-notify-bg-color: var(--crm-container-bg-color);
+
+/* ─── Wizard ──────────────────────────────────────────────────────────────── */
+  --crm-wizard-bg-color: var(--crm-container-bg-color);
+  --crm-wizard-active-bg-color: var(--crm-primary-color);
+  --crm-wizard-active-color: var(--crm-primary-text-color);
+
+/* ─── Alpha filter ────────────────────────────────────────────────────────── */
+  --crm-filter-bg-color: var(--crm-c-blue-dark);
+}

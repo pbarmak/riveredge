@@ -1,0 +1,671 @@
+/*
+  River Edge — responsive.css
+  Loaded at weight 150 (after river.css at 100, after RiverLea core at -100…-99).
+
+  Sections:
+  1.  Navigation menu — larger font, touch target, toggle button
+  2.  Full-width contact summary — override Claro's --crm-page-padding
+  3.  Drupal regions — hide highlighted/help on contact pages
+  4.  Shortcuts section removal
+  5.  Touch-friendly tap targets (global)
+  6.  Mobile: general layout
+  7.  Mobile: tables → card stacks
+  8.  Mobile: contact tab accordion / horizontal scroll
+  9.  Per-user dark/light mode — html[data-riveredge-theme] overrides
+*/
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   1. Navigation menu
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Larger font on menu links */
+#civicrm-menu > li > a,
+#civicrm-menu > li > span {
+  font-size: .9rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+}
+#civicrm-menu-nav {
+	font-size: 14px;
+}
+
+.crm-search-display-table > table.table > thead > tr > th.crm-search-result-select {
+	min-width: 104px !important;
+}
+
+
+/*
+ * Dark mode toggle wrapper — appended to <body> by JS to avoid any parent
+ * overflow or z-index issues.  Uses position:fixed so it always sits at the
+ * top-right of the viewport, inside the nav bar area.
+ *
+ * --crm-menubar-bottom is set by crm.menubar.js to the pixel height of the
+ * menu bar (menu height + top offset), so we can size the wrapper to match.
+ */
+#riveredge-theme-toggle-wrapper {
+  position: fixed;
+  top: 0;
+  right: 3rem;          /* leaves room for CiviCRM's own right-edge icons */
+  height: var(--crm-menubar-bottom, 42px);
+  display: flex;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: all;
+}
+
+#riveredge-theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  height: 100%;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  color: inherit;
+  background: transparent;
+  border: none;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+#riveredge-theme-toggle:hover,
+#riveredge-theme-toggle:focus {
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+.riveredge-toggle-icon {
+  font-size: 1.1em;
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2. Full-width contact summary
+   --crm-page-padding: 3rem is set by #block-claro-content in RiverLea _cms.css.
+   We override it here with higher specificity.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Override Claro's page padding on ALL CiviCRM pages inside the block */
+#block-claro-content:has(.crm-contact-page) {
+  --crm-page-padding: 0 !important;
+  padding: 0 !important;
+}
+
+/* Broader fallback for browsers without :has() or non-Claro themes */
+.crm-contact-page {
+  --crm-page-padding: 0;
+}
+
+/* Ensure the content wrapper fills the viewport width */
+.crm-contact-page #crm-main-content-wrapper {
+  max-width: none;
+  width: 100%;
+  padding-inline: 0;
+}
+
+.crm-contact-page .crm-container {
+  padding-inline: 0;
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   3. Drupal regions — hide highlighted/help on contact pages only
+   These are Drupal block regions that appear outside of #crm-main.
+   `:has()` targets the <body> when it contains a .crm-contact-page child.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Drupal content-header (blank section above CiviCRM content on contact pages) */
+body:has(.crm-contact-page) header.content-header {
+  display: none !important;
+}
+
+/* Claro region IDs (adjust if your Drupal theme differs) */
+body:has(.crm-contact-page) #block-claro-highlighted,
+body:has(.crm-contact-page) #block-claro-help,
+body:has(.crm-contact-page) .region-highlighted,
+body:has(.crm-contact-page) .region-help,
+body:has(.crm-contact-page) [id$="-highlighted"],
+body:has(.crm-contact-page) [id$="-help"],
+body:has(.crm-contact-page) [class*="region-help"],
+body:has(.crm-contact-page) [class*="region-highlighted"] {
+  display: none !important;
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   4. Shortcuts section removal
+   Inspect your contact page HTML to confirm which element to target.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.crm-contact-page #shortcuts,
+.crm-contact-page .crm-shortcuts-container,
+.crm-contact-page .crm-shortcuts,
+.crm-contact-page .crm-contact-shortcuts,
+.crm-contact-page #crm-shortcuts {
+  display: none !important;
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   5. Touch-friendly tap targets
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.crm-container .crm-button,
+.crm-container input[type="submit"],
+.crm-container input[type="button"],
+.crm-container input[type="reset"],
+.crm-container button,
+.crm-container .ui-button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.crm-container input[type="text"],
+.crm-container input[type="email"],
+.crm-container input[type="tel"],
+.crm-container input[type="url"],
+.crm-container input[type="search"],
+.crm-container input[type="number"],
+.crm-container input[type="password"],
+.crm-container select,
+.crm-container textarea {
+  min-height: 44px;
+  padding-block: 0.5rem;
+}
+
+.crm-container .crm-form-checkbox label,
+.crm-container .crm-form-radio label {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block: 0.25rem;
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   6. Mobile: general layout  (≤ 768 px)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@media (max-width: 768px) {
+  .crm-container {
+    overflow-x: hidden;
+  }
+
+  .crm-container .crm-submit-buttons {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .crm-container select {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ui-dialog {
+    width: 96vw !important;
+    max-width: 96vw !important;
+    left: 2vw !important;
+  }
+
+  .ui-dialog .ui-dialog-content {
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+
+  /* Claro page padding override on smaller viewports too */
+  #block-claro-content:has(.crm-contact-page) {
+    --crm-page-padding: 0 !important;
+  }
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   7. Mobile: tables → card stacks  (≤ 768 px)
+   JS in riveredge.js stamps data-label attributes on each <td>.
+   These selectors must match TABLE_SEL in riveredge.js.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@media (max-width: 768px) {
+
+  /* Shared rule applied to all CiviCRM data tables */
+  .crm-container table.dataTable thead,
+  .crm-container table.display thead,
+  .crm-container table.crm-ajax-table thead,
+  .crm-container table.crm-data-table thead,
+  .crm-container table.crm-entity-table thead,
+  .crm-container table.crm-results-table thead {
+    display: none !important;
+  }
+
+  .crm-container table.dataTable,
+  .crm-container table.display,
+  .crm-container table.crm-ajax-table,
+  .crm-container table.crm-data-table,
+  .crm-container table.crm-entity-table,
+  .crm-container table.crm-results-table {
+    display: block !important;
+    border: none !important;
+    width: 100% !important;
+  }
+
+  .crm-container table.dataTable tbody,
+  .crm-container table.display tbody,
+  .crm-container table.crm-ajax-table tbody,
+  .crm-container table.crm-data-table tbody,
+  .crm-container table.crm-entity-table tbody,
+  .crm-container table.crm-results-table tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Each row is a card */
+  .crm-container table.dataTable tbody tr,
+  .crm-container table.display tbody tr,
+  .crm-container table.crm-ajax-table tbody tr,
+  .crm-container table.crm-data-table tbody tr,
+  .crm-container table.crm-entity-table tbody tr,
+  .crm-container table.crm-results-table tbody tr {
+    display: block !important;
+    margin-bottom: 1rem !important;
+    border: 1px solid var(--crm-border-color) !important;
+    border-radius: var(--crm-l-radius) !important;
+    background: var(--crm-container-bg-color) !important;
+    box-shadow: var(--crm-shadow-block);
+    overflow: hidden;
+    width: 100% !important;
+  }
+
+  /* Each cell is a labelled row */
+  .crm-container table.dataTable tbody td,
+  .crm-container table.display tbody td,
+  .crm-container table.crm-ajax-table tbody td,
+  .crm-container table.crm-data-table tbody td,
+  .crm-container table.crm-entity-table tbody td,
+  .crm-container table.crm-results-table tbody td {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 0.2rem !important;
+    padding: 0.5rem 0.75rem !important;
+    border: none !important;
+    border-bottom: 1px solid var(--crm-border-color) !important;
+    text-align: left !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .crm-container table.dataTable tbody td:last-child,
+  .crm-container table.display tbody td:last-child,
+  .crm-container table.crm-ajax-table tbody td:last-child,
+  .crm-container table.crm-data-table tbody td:last-child,
+  .crm-container table.crm-entity-table tbody td:last-child,
+  .crm-container table.crm-results-table tbody td:last-child {
+    border-bottom: none !important;
+  }
+
+  /* The column label — set via data-label by JS */
+  .crm-container table.dataTable tbody td::before,
+  .crm-container table.display tbody td::before,
+  .crm-container table.crm-ajax-table tbody td::before,
+  .crm-container table.crm-data-table tbody td::before,
+  .crm-container table.crm-entity-table tbody td::before,
+  .crm-container table.crm-results-table tbody td::before {
+    content: attr(data-label) ": ";
+    font-weight: bold;
+    font-size: 0.78em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.65;
+    flex: 0 0 100%;
+    margin-bottom: 0.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Suppress label when data-label is blank (e.g. action column) */
+  .crm-container table.dataTable tbody td[data-label=""]::before,
+  .crm-container table.display tbody td[data-label=""]::before,
+  .crm-container table.crm-ajax-table tbody td[data-label=""]::before,
+  .crm-container table.crm-data-table tbody td[data-label=""]::before,
+  .crm-container table.crm-entity-table tbody td[data-label=""]::before,
+  .crm-container table.crm-results-table tbody td[data-label=""]::before {
+    display: none !important;
+  }
+
+  /* DataTables helper rows (sorting, empty message) — don't turn into cards */
+  .crm-container table.dataTable tbody tr.dataTables_empty,
+  .crm-container table.display tbody tr.dataTables_empty {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* DataTables wrapper — prevent horizontal scroll at the container level */
+  .crm-container .dataTables_wrapper {
+    overflow-x: hidden;
+  }
+
+  /* DataTables pagination — stack it */
+  .crm-container .dataTables_wrapper .dataTables_info,
+  .crm-container .dataTables_wrapper .dataTables_paginate {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   8. Mobile: contact tabs
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── Horizontal scroll strip  (601 – 767 px) ────────────────────────────── */
+@media (min-width: 601px) and (max-width: 767px) {
+
+  .crm-contact-page #mainTabContainer.ui-tabs {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .crm-contact-page #mainTabContainer .crm-contact-tabs-list,
+  .crm-contact-page #mainTabContainer .ui-tabs-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    width: 100%;
+  }
+
+  .crm-contact-page #mainTabContainer .ui-tabs-nav > li,
+  .crm-contact-page #mainTabContainer .crm-contact-tabs-list > li {
+    flex: 0 0 auto;
+  }
+}
+
+/* ── Accordion mode  (≤ 600 px) ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+
+  .crm-contact-page #mainTabContainer.riveredge-accordion-active {
+    display: block !important;
+  }
+
+  /* Hide the tab nav — accordion triggers replace it */
+  .crm-contact-page #mainTabContainer.riveredge-accordion-active .crm-contact-tabs-list,
+  .crm-contact-page #mainTabContainer.riveredge-accordion-active .ui-tabs-nav {
+    display: none !important;
+  }
+
+  /* Panels are always visible; the accordion body controls collapse */
+  .crm-contact-page #mainTabContainer.riveredge-accordion-active .ui-tabs-panel {
+    display: block !important;
+    padding: 0;
+    border: none;
+  }
+
+  /* ── Accordion trigger ─────────────────────────────────────────────────── */
+  .riveredge-accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    min-height: 44px;
+    background: var(--crm-accordion-header-bg-color);
+    color: var(--crm-accordion-header-color);
+    font-weight: bold;
+    cursor: pointer;
+    border-top: 1px solid var(--crm-border-color);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .riveredge-accordion-trigger:hover,
+  .riveredge-accordion-trigger:focus {
+    background: var(--crm-accordion-header-bg-active-color);
+    outline: none;
+  }
+
+  .riveredge-accordion-trigger .riveredge-acc-icon {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    font-size: 0.85em;
+    opacity: 0.6;
+    margin-left: 0.5rem;
+  }
+
+  .riveredge-accordion-trigger.open .riveredge-acc-icon {
+    transform: rotate(90deg);
+  }
+
+  /* ── Accordion body ────────────────────────────────────────────────────── */
+  .riveredge-accordion-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.28s ease;
+  }
+
+  .riveredge-accordion-body.open {
+    max-height: 9999px;
+  }
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   9. Per-user dark / light mode overrides
+   Applied when JS sets html[data-riveredge-theme="dark|light"].
+   This lets the user override the OS preference even when the RiverLea
+   backend setting is 'inherit' (which wraps dark vars in @media).
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── Force DARK ──────────────────────────────────────────────────────────── */
+html[data-riveredge-theme="dark"] {
+  color-scheme: dark;
+
+  /* CiviCRM menubar variables (crm-menubar.css uses these for nav link bg/text) */
+  --crm-menubar-item-color: transparent;
+  --crm-menubar-text-color: #f0f2f5;
+
+  /* Core dark vars */
+  --crm-text-color: var(--crm-text-light-color);
+  --crm-border-color: var(--crm-c-gray-500);
+  --crm-paper: var(--crm-c-gray-900);
+  --crm-ink: var(--crm-text-light-color);
+  --crm-code-bg-color: var(--crm-layer1-bg-color);
+  --crm-shadow-popup: 0 3px 18px 0 rgb(0, 0, 0);
+  --crm-heading-color: var(--crm-text-light-color);
+  --crm-primary-ink-color: var(--crm-c-gray-300);
+  --crm-secondary-ink-color: #cdcdcd;
+  --crm-success-ink-color: var(--crm-success-light-color);
+  --crm-warning-ink-color: var(--crm-warning-light-color);
+  --crm-danger-ink-color: var(--crm-danger-light-color);
+  --crm-info-ink-color: var(--crm-info-light-color);
+  --crm-tabs-bg-color: var(--crm-layer2-bg-color);
+  --crm-contact-label-bg-color: transparent;
+  --crm-dialog-header-border-color: transparent;
+
+  /* River Edge dark stream overrides */
+  --crm-c-gray-800: #1e2129;
+  --crm-c-gray-700: #2d3140;
+  --crm-c-gray-600: #55596a;
+  --crm-c-gray-500: #9a9ba8;
+  --crm-text-light-color: #f0f2f5;
+  --crm-text-dark-color: #2a2933;
+  --crm-link-color: var(--crm-c-amber);
+  --crm-link-hover-color: var(--crm-c-amber-light);
+  --crm-focus-color: var(--crm-link-color);
+  --crm-page-bg-color: #1c1f2b;
+  --crm-container-bg-color: #242836;
+  --crm-layer1-bg-color: #2b2f3e;
+  --crm-layer2-bg-color: #333748;
+  --crm-shadow-block: 0 3px 18px 0 rgba(0, 0, 0, .6);
+  --crm-heading-bg-color: var(--crm-secondary-color);
+  --crm-accordion-body-bg-color: var(--crm-layer1-bg-color);
+  --crm-form-block-bg-color: var(--crm-container-bg-color);
+  --crm-input-border-color: var(--crm-c-gray-500);
+  /* Table row hover — must be a dark-palette value; the default is
+     --crm-c-yellow-light which renders as light-on-light in dark mode. */
+  --crm-table-row-hover-color: #3a3f58;
+  /* Alert success — dark bg with readable light-green text */
+  --crm-alert-success-bg-color: #1c3d2a;
+  --crm-alert-success-border-color: #2d6645;
+  --crm-alert-success-text-color: #88dca8;
+  --crm-input-bg-color: #262a38;
+  --crm-contact-header-bg-color: var(--crm-layer2-bg-color);
+  --crm-contact-header2-bg-color: #1c1f2b;
+  --crm-contact-block-bg-color: var(--crm-container-bg-color);
+  --crm-contact-tabs-bg-color: var(--crm-layer1-bg-color);
+  --crm-contact-panel-bg-color: var(--crm-container-bg-color);
+  --crm-contact-tab-hover-bg-color: var(--crm-layer2-bg-color);
+  --crm-contact-box-shadow: inset 0 5px 18px -5px rgba(0, 0, 0, .75);
+  --crm-contact-edit-border: 1px solid var(--crm-link-hover-color);
+  --crm-dialog-body-bg-color: var(--crm-container-bg-color);
+  --crm-dashlet-header-bg-color: var(--crm-layer1-bg-color);
+  --crm-dropdown-bg-color: var(--crm-container-bg-color);
+  --crm-dropdown2-bg-color: var(--crm-container-bg-color);
+  --crm-notify-bg-color: var(--crm-container-bg-color);
+  --crm-wizard-bg-color: var(--crm-container-bg-color);
+  --crm-panel-bg-color: var(--crm-container-bg-color);
+  --crm-panel-border-col: var(--crm-c-gray-500);
+}
+
+/* CiviCRM nav bar — forced dark. */
+html[data-riveredge-theme="dark"] body #civicrm-menu-nav,
+html[data-riveredge-theme="dark"] body #civicrm-menu {
+  background-color: #151821 !important;
+  border-bottom-color: #333748 !important;
+}
+
+/* Submenu dropdowns — clearly lighter than the page (#12141a) and containers
+   (#1a1d25) so they read as a floating panel, not a page takeover.
+   Box-shadow kept modest: a 32 px / 0.85 spread was making the surrounding
+   near-black page content visually vanish (dark + strong shadow = void). */
+html[data-riveredge-theme="dark"] body #civicrm-menu ul {
+  background-color: #363b50 !important;
+  border: 1px solid #4e5470 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* SmartMenus scroll arrows — CiviCRM's sm-civicrm theme has no CSS for these,
+   so they default to position:static and fall into normal document flow.
+   That expands the nav <li> and lets the arrows overflow the fixed nav bar,
+   covering page content as invisible-but-layout-occupying ghost elements.
+   position:absolute keeps them as overlays that don't disturb flow or layout. */
+.sm-civicrm .scroll-up,
+.sm-civicrm .scroll-down {
+  position: absolute;
+  display: none;
+  overflow: hidden;
+  height: 20px;
+  background: var(--crm-menubar-color, #222831);
+}
+html[data-riveredge-theme="dark"] .sm-civicrm .scroll-up,
+html[data-riveredge-theme="dark"] .sm-civicrm .scroll-down {
+  background: #363b50;
+}
+
+/* All nav links + toggle text */
+html[data-riveredge-theme="dark"] body #civicrm-menu-nav a,
+html[data-riveredge-theme="dark"] body #civicrm-menu-nav a:visited,
+html[data-riveredge-theme="dark"] body #civicrm-menu-nav span,
+html[data-riveredge-theme="dark"] body #riveredge-theme-toggle-wrapper,
+html[data-riveredge-theme="dark"] body #riveredge-theme-toggle {
+  color: #f0f2f5 !important;
+}
+
+html[data-riveredge-theme="dark"] body #civicrm-menu-nav a:hover,
+html[data-riveredge-theme="dark"] body #civicrm-menu-nav a:focus,
+html[data-riveredge-theme="dark"] body #riveredge-theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+}
+
+/* Drupal page background — forced dark.
+   Only override background; let CSS variables handle text colour so we
+   don't clobber the dark contact header's white text via inheritance. */
+html[data-riveredge-theme="dark"] body,
+html[data-riveredge-theme="dark"] #page,
+html[data-riveredge-theme="dark"] main,
+html[data-riveredge-theme="dark"] .layout-container,
+html[data-riveredge-theme="dark"] #block-claro-content {
+  background-color: #12141a !important;
+}
+
+/* CiviCRM content containers — slightly lighter than page bg */
+html[data-riveredge-theme="dark"] .crm-container,
+html[data-riveredge-theme="dark"] #crm-main,
+html[data-riveredge-theme="dark"] .crm-content-block {
+  background-color: #1a1d25 !important;
+}
+
+/* ── Force LIGHT (override OS dark preference) ───────────────────────────── */
+html[data-riveredge-theme="light"] {
+  color-scheme: light;
+
+  --crm-text-color: #34303b;
+  --crm-border-color: #cad5d7;
+  --crm-paper: #fff;
+  --crm-ink: #0a0a0a;
+  --crm-layer1-bg-color: #f3f6f7;
+  --crm-layer2-bg-color: #ebeff0;
+  --crm-page-bg-color: #e8eef0;
+  --crm-container-bg-color: #fff;
+  --crm-link-color: #005893;
+  --crm-link-hover-color: #043b60;
+  --crm-focus-color: #005893;
+  --crm-input-bg-color: #fff;
+  --crm-input-border-color: #c2cfd8;
+  --crm-shadow-block: 0 3px 18px 0 rgba(48, 40, 40, .25);
+  --crm-shadow-popup: 0 3px 18px 0 rgba(48, 40, 40, .25);
+  --crm-heading-bg-color: var(--crm-layer2-bg-color);
+  --crm-heading-color: var(--crm-text-dark-color);
+  --crm-contact-header-bg-color: #222831;
+  --crm-contact-header2-bg-color: #393a3f;
+  --crm-contact-block-bg-color: #fff;
+  --crm-contact-tabs-bg-color: #fff;
+  --crm-contact-tab-hover-bg-color: #ebeff0;
+  --crm-contact-label-bg-color: #fff;
+  --crm-contact-box-shadow: inset 0 3px 18px -5px rgba(0, 0, 0, .25);
+  --crm-accordion-body-bg-color: transparent;
+  --crm-form-block-bg-color: transparent;
+  --crm-dropdown-bg-color: #fff;
+  --crm-dropdown2-bg-color: #fff;
+  /* RiverLea defaults --crm-dropdown-color to --crm-text-light-color (#f0f2f5)
+     which is designed for dark-nav dropdowns but is invisible on white bg. */
+  --crm-dropdown-color: #34303b;
+  --crm-notify-bg-color: #fff;
+  --crm-dialog-body-bg-color: #fff;
+  --crm-dashlet-header-bg-color: var(--crm-secondary-color);
+  --crm-panel-bg-color: #fff;
+  --crm-wizard-bg-color: #fff;
+  --crm-tabs-bg-color: #f3f6f7;
+}
+
+/* CiviCRM nav bar — forced light.
+   The stream already gives the nav a dark bg; we just reinforce it.
+   No text colour override needed — the stream handles that correctly. */
+html[data-riveredge-theme="light"] body #civicrm-menu-nav,
+html[data-riveredge-theme="light"] body #civicrm-menu {
+  /* background-color: #222831 !important; */
+}
+
+/* Drupal page background — forced light */
+html[data-riveredge-theme="light"] body,
+html[data-riveredge-theme="light"] #page,
+html[data-riveredge-theme="light"] main,
+html[data-riveredge-theme="light"] .layout-container,
+html[data-riveredge-theme="light"] #block-claro-content {
+  background-color: #e8eef0 !important;
+}
+
+html[data-riveredge-theme="light"] .crm-container,
+html[data-riveredge-theme="light"] #crm-main,
+html[data-riveredge-theme="light"] .crm-content-block {
+  background-color: #fff !important;
+}

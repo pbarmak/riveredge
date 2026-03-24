@@ -42,6 +42,28 @@
   function getState()  { var s = getSaved(); return s === 'dark' ? 'dark' : 'light'; }
   function nextState(s){ return s === 'dark' ? 'light' : 'dark'; }
 
+  function positionToggle() {
+    var wrapper = document.getElementById('riveredge-theme-toggle-wrapper');
+    if (!wrapper) return;
+
+    // --crm-menubar-bottom is set by CiviCRM's crm.menubar.js to the pixel
+    // bottom-edge of the nav bar (viewport px, e.g. "81px").  It is reliable
+    // across page types and doesn't depend on the nav's position property.
+    var raw = getComputedStyle(document.documentElement)
+                .getPropertyValue('--crm-menubar-bottom').trim();
+    var bottom = parseFloat(raw);
+
+    if (bottom > 0) {
+      // Use a fixed nav height of 44px; top = bottom - height.
+      var h = 44;
+      //wrapper.style.top    = Math.max(0, bottom - h) + 'px';
+      wrapper.style.top    = '0px';
+      wrapper.style.height = h + 'px';
+    }
+    // If the variable isn't set yet the wrapper keeps its current style;
+    // the retry loop will call us again until it appears.
+  }
+
   function injectToggle() {
     if (document.getElementById('riveredge-theme-toggle')) return;
 
@@ -77,23 +99,31 @@
 
     wrapper.appendChild(btn);
     document.body.appendChild(wrapper);
+    positionToggle();
     console.log('[riveredge] toggle injected');
   }
 
   // Inject now (DOM is ready — we are in page-footer).
   injectToggle();
 
+  // Reposition on resize (handles orientation change, window resize, etc.)
+  window.addEventListener('resize', positionToggle);
+
   // Also inject after AJAX menu load, in case it fires after us.
   if (window.CRM && CRM.$) {
     CRM.$(document).on('crmLoad.riveredge', function (e) {
-      if (e.target && e.target.id === 'civicrm-menu') { injectToggle(); }
+      if (e.target && e.target.id === 'civicrm-menu') { injectToggle(); positionToggle(); }
     });
   }
 
   // Last-resort: retry a few times in case of unusual load order.
+  // Also reposition each tick — CiviCRM's menubar JS sets the nav's final
+  // top offset asynchronously, so early reads of getBoundingClientRect may
+  // return 0. Keep correcting until the nav settles.
   var _retries = 0;
   var _retryTimer = setInterval(function () {
     injectToggle();
+    positionToggle();
     if (++_retries >= 20 || document.getElementById('riveredge-theme-toggle')) {
       clearInterval(_retryTimer);
     }
@@ -553,5 +583,36 @@
     clearTimeout(_rz);
     _rz = setTimeout(function () { stampAll(); handleTabs(); }, 200);
   });
+
+  /* ─── 7. Contact merge — fix inline-style !important on section title rows ── */
+  /* tr.no-data rows on the merge page have style="background-color:#fff !important"
+     hard-coded in the template.  Inline !important cannot be overridden by any
+     CSS rule, so we patch the style attribute directly when in dark mode.      */
+  function fixMergeRows() {
+    var isDark = html.getAttribute('data-riveredge-theme') === 'dark' ||
+                 (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches &&
+                  !html.getAttribute('data-riveredge-theme'));
+    document.querySelectorAll('tr.no-data').forEach(function (tr) {
+      if (isDark) {
+        tr.style.setProperty('background-color', '#21242e', 'important');
+        tr.style.setProperty('border-bottom-color', '#3a3f52', 'important');
+        tr.style.setProperty('color', 'var(--crm-text-color)', 'important');
+      } else {
+        // Restore original if switching back to light
+        tr.style.setProperty('background-color', '#fff', 'important');
+        tr.style.setProperty('border-bottom-color', '#ccc', 'important');
+        tr.style.removeProperty('color');
+      }
+    });
+  }
+
+  fixMergeRows();
+
+  // Re-run when the user toggles theme
+  var _origApply = applyTheme;
+  applyTheme = function (theme) {
+    _origApply(theme);
+    fixMergeRows();
+  };
 
 }(window, document));

@@ -30,18 +30,21 @@ function riveredge_civicrm_install(): void {}
 function riveredge_civicrm_enable(): void {}
 
 /**
- * Implements hook_civicrm_pageRun().
- *
  * Loads responsive CSS and the dark-mode/accordion JS whenever a RiverLea
- * stream is active. Weight 150 ensures these load after river.css (weight 100).
+ * stream is active. Safe to call multiple times per request — uses a static
+ * flag and Civi's built-in resource deduplication.
  */
-function riveredge_civicrm_pageRun(&$page): void {
-  if (!\Civi::service('riverlea.style_loader')->isActive()) {
+function _riveredge_add_resources(): void {
+  static $done = FALSE;
+  if ($done || !\Civi::service('riverlea.style_loader')->isActive()) {
     return;
   }
+  $done = TRUE;
+
   // Inline snippet in <head>: applies saved theme class before first paint
-  // to avoid a flash. This is tiny and inlined so it always runs first.
+  // to avoid a flash. Tiny and inlined so it always runs first.
   \CRM_Core_Region::instance('html-header')->add([
+    'name'   => 'riveredge-theme-init',
     'markup' => '<script>
 (function(){
   try {
@@ -60,4 +63,21 @@ function riveredge_civicrm_pageRun(&$page): void {
     // page-footer runs after the DOM is fully built — document.body is
     // always available, no DOMContentLoaded complexity needed.
     ->addScriptFile('riveredge', 'js/riveredge.js', 150, 'page-footer');
+}
+
+/**
+ * Implements hook_civicrm_pageRun().
+ * Covers CRM_Core_Page-based routes (e.g. event/manage, dashboard).
+ */
+function riveredge_civicrm_pageRun(&$page): void {
+  _riveredge_add_resources();
+}
+
+/**
+ * Implements hook_civicrm_buildForm().
+ * Covers CRM_Core_Form-based routes (e.g. import, contribute/search,
+ * advanced search, contact edit, etc.) — the majority of CiviCRM pages.
+ */
+function riveredge_civicrm_buildForm($formName, &$form): void {
+  _riveredge_add_resources();
 }

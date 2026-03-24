@@ -8,7 +8,7 @@
   3.  Drupal regions — hide highlighted/help on contact pages
   4.  Shortcuts section removal
   5.  Touch-friendly tap targets (global)
-  6.  Mobile: general layout
+  6.  Mobile: general layout (incl. contact merge horizontal scroll)
   7.  Mobile: tables → card stacks
   8.  Mobile: contact tabs → hamburger menu
   9.  Per-user dark/light mode — html[data-riveredge-theme] overrides
@@ -32,8 +32,92 @@
 	font-size: 14px;
 }
 
-.crm-search-display-table > table.table > thead > tr > th.crm-search-result-select {
-	min-width: 104px !important;
+/* Inline-edit WYSIWYG (Summernote) on contact summary —
+   The editor sits inside table.crm-inline-edit-form > td.html-adjust.
+   width:100% on the editor resolves to 100% of the td, which itself expands
+   to the toolbar's intrinsic ~2200px.  Fix by constraining the whole chain:
+   form → table (fixed layout) → td → editor. */
+.crm-inline-edit.form:has(.note-editor) {
+  float: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  box-sizing: border-box;
+}
+.crm-inline-edit.form:has(.note-editor) table.crm-inline-edit-form {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+.crm-inline-edit.form:has(.note-editor) td.html-adjust {
+  width: 100% !important;
+  white-space: normal !important;
+}
+.crm-inline-edit.form .note-editor.note-frame {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+/* Entity view pages (contribution, contact, event, etc.) —
+   table.crm-info-panel has no label-column width in RiverLea, so td.label
+   collapses to text-width and the value cell spans the rest of the 100%-wide
+   table, pushing values to the far right.  A fixed width keeps them tight. */
+.crm-container table.crm-info-panel td.label {
+  width: var(--crm-input-label-width);
+  min-width: var(--crm-input-label-width);
+  white-space: nowrap;
+}
+/* Also cover div-based view layouts (.crm-section .label/.content) used by
+   some other entity view pages. */
+.crm-container .crm-summary-group .crm-section .label {
+  width: var(--crm-input-label-width) !important;
+}
+.crm-container .crm-summary-group .crm-section .content {
+  margin-left: var(--crm-input-label-width) !important;
+}
+
+/* Afform filter select2 boxes — RiverLea fixes all .select2-container to
+   --crm-input-width (15em) with !important. For SearchKit afform filter
+   fields the inputs should fill their column, not be capped at that width. */
+.afform-directive .select2-container {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+/* Dashboard inactive-dashlet header — restore normal font size */
+.crm-container .crm-inactive-dashlet .crm-dashlet-header h3 {
+  font-size: 100% !important;
+}
+
+/* SearchKit select-all + dropdown — styled as a joined split button */
+#bootstrap-theme th.crm-search-result-select .btn-group {
+  display: inline-flex;
+  gap: 0;
+}
+#bootstrap-theme th.crm-search-result-select button.btn {
+  background: var(--crm-container-bg-color);
+  color: var(--crm-text-color);
+  border: 1px solid var(--crm-input-border-color);
+  padding: 0.25rem 0.5rem;
+  line-height: 1.4;
+  border-radius: 0;
+}
+#bootstrap-theme th.crm-search-result-select button.btn:first-child {
+  border-radius: var(--crm-btn-radius) 0 0 var(--crm-btn-radius);
+  border-right-width: 0;
+}
+#bootstrap-theme th.crm-search-result-select button.btn.dropdown-toggle {
+  border-radius: 0 var(--crm-btn-radius) var(--crm-btn-radius) 0;
+  padding-inline: 0.4rem;
+}
+#bootstrap-theme th.crm-search-result-select button.btn:hover,
+#bootstrap-theme th.crm-search-result-select button.btn:focus {
+  background: var(--crm-c-gray-100);
+  color: var(--crm-text-color);
+}
+#bootstrap-theme th.crm-search-result-select button.btn i.crm-i {
+  color: var(--crm-text-color);
 }
 
 
@@ -192,7 +276,7 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
 .crm-container input[type="reset"],
 .crm-container button,
 .crm-container .ui-button {
-  min-height: 44px;
+  min-height: 34px;
   min-width: 44px;
 }
 
@@ -205,7 +289,7 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
 .crm-container input[type="password"],
 .crm-container select,
 .crm-container textarea {
-  min-height: 44px;
+  min-height: 34px;
   padding-block: 0.5rem;
 }
 
@@ -416,6 +500,26 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
     width: 100%;
     box-sizing: border-box;
     justify-content: flex-start;
+  }
+
+  /* ── Contact merge: horizontal scroll + sticky label column ────────────── */
+  /* .crm-container has overflow-x:hidden above — punch through it for merge */
+  .crm-contact-merge-form-block {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .crm-contact-merge-form-block table.row-highlight {
+    min-width: 560px;
+    width: 100%;
+  }
+  /* Sticky field-label column so users always know what row they're on */
+  .crm-contact-merge-form-block table.row-highlight td:first-child,
+  .crm-contact-merge-form-block table.row-highlight th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--crm-container-bg-color);
+    /* section-header rows (tr.no-data) have an inline bg override handled by JS */
   }
 }
 
@@ -868,6 +972,20 @@ html[data-riveredge-theme="dark"] main,
 html[data-riveredge-theme="dark"] .layout-container,
 html[data-riveredge-theme="dark"] #block-claro-content {
   background-color: #12141a !important;
+}
+
+/* Danger/error rows (e.g. contact merge) — muted dark red instead of
+   the default bright pink which is jarring in dark mode. */
+html[data-riveredge-theme="dark"] {
+  --crm-alert-danger-bg-color: #3d1520;
+  --crm-alert-danger-text-color: #f0aabb;
+}
+
+/* Summernote editable area — light background so inherited dark text colours
+   stay readable when editing. */
+html[data-riveredge-theme="dark"] .note-editable {
+  background: #a7a7a8 !important;
+  color: #1a1a1a !important;
 }
 
 /* CiviCRM content containers — slightly lighter than page bg */

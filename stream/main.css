@@ -69,6 +69,7 @@
   --crm-font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   --crm-font: "Inter", "Open Sans", var(--crm-font-system);
+  --crm-font-size: 0.84rem !important;
   --crm-link-decoration-hover: none;
   --crm-heading-bg-color: var(--crm-layer2-bg-color);
   --crm-heading-color: var(--crm-text-dark-color);

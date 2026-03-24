@@ -93,6 +93,17 @@
   --crm-wizard-active-bg-color: var(--crm-primary-color);
   --crm-wizard-active-color: var(--crm-primary-text-color);
 
+/* ─── Alerts — tone down danger/error in dark mode ───────────────────────── */
+  --crm-alert-danger-bg-color: #3d1520;
+  --crm-alert-danger-text-color: #f0aabb;
+
 /* ─── Alpha filter ────────────────────────────────────────────────────────── */
   --crm-filter-bg-color: var(--crm-c-blue-dark);
+}
+
+/* Summernote editable area — give it a light background so text (which the
+   dark theme may force to light colours via inheritance) stays readable. */
+.note-editable {
+  background: #f0f2f5 !important;
+  color: #1a1a1a !important;
 }

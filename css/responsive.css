@@ -19,17 +19,32 @@
    1. Navigation menu
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
+/* Nav bar lives outside .crm-container so --crm-font is never applied to it
+   by RiverLea core. Apply it explicitly here. */
+#civicrm-menu-nav {
+  font-family: var(--crm-font);
+}
+
+#civicrm-menu li li a {
+	padding: 8px 36px 8px 10px !important;
+}
+
+#civicrm-menu > li > ul > li:first-child > a {
+  padding-top: 12px !important;
+}
+
+
 /* Larger font on menu links */
 #civicrm-menu > li > a,
 #civicrm-menu > li > span {
-  font-size: .9rem;
+  font-size: .84rem;
   min-height: 44px;
   display: flex;
   align-items: center;
   padding: 0.4rem 0.9rem;
 }
 #civicrm-menu-nav {
-	font-size: 14px;
+  font-size: .84rem;
 }
 
 /* Inline-edit WYSIWYG (Summernote) on contact summary —
@@ -72,6 +87,11 @@
   min-width: var(--crm-input-label-width);
   white-space: nowrap;
 }
+/* Hide the AI auto-generate button */
+.generate-text-button {
+  display: none !important;
+}
+
 /* Also cover div-based view layouts (.crm-section .label/.content) used by
    some other entity view pages. */
 .crm-container .crm-summary-group .crm-section .label {
@@ -122,6 +142,37 @@
 }
 #bootstrap-theme th.crm-search-result-select button.btn i.crm-i {
   color: var(--crm-text-color);
+}
+
+/* Contact summary Actions + Edit buttons — use primary colour instead of secondary */
+#crm-contact-actions-link.button,
+#crm-contact-actions-link.button:link,
+#crm-contact-actions-link.button:visited,
+.crm-container a.button.edit,
+.crm-container a.button.edit:link,
+.crm-container a.button.edit:visited {
+  background: var(--crm-primary-color);
+  color: var(--crm-primary-text-color);
+}
+#crm-contact-actions-link.button:hover,
+#crm-contact-actions-link.button:focus,
+.crm-container a.button.edit:hover,
+.crm-container a.button.edit:focus {
+  background: var(--crm-primary-hover-color);
+  color: var(--crm-primary-text-color);
+}
+
+/* Contact Actions dropdown — the panel sits inside the dark contact header,
+   so it inherits light text.  Reset to standard text/link colours. */
+#crm-contact-actions-list {
+  color: var(--crm-text-color) !important;
+  background: var(--crm-dropdown-bg-color, var(--crm-container-bg-color)) !important;
+}
+#crm-contact-actions-list a {
+  color: var(--crm-link-color) !important;
+}
+#crm-contact-actions-list a:hover {
+  color: var(--crm-link-hover-color) !important;
 }
 
 
@@ -260,6 +311,17 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
    4. Shortcuts section removal
    Inspect your contact page HTML to confirm which element to target.
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Page title — small top breathing room */
+.page-title {
+  margin-top: 0.5rem !important;
+  font-size: 1.7rem !important;
+}
+
+/* Hide the Drupal "add to shortcuts" star */
+a.shortcut-action.shortcut-action--add {
+  display: none !important;
+}
 
 .crm-contact-page #shortcuts,
 .crm-contact-page .crm-shortcuts-container,
@@ -416,9 +478,6 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
   /* Claro page padding override on smaller viewports too */
   #block-claro-content:has(.crm-contact-page) {
     --crm-page-padding: 0 !important;
-  }
-
-  .toolbar-tab {
   }
 
   nav#civicrm-menu-nav .crm-menubar-toggle-btn {

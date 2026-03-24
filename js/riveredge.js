@@ -76,13 +76,12 @@
     btn.type = 'button';
     btn.style.cssText = 'background:rgba(0,0,0,0.55);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:4px;padding:0 10px;height:32px;cursor:pointer;font-size:13px;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap;line-height:1;';
 
-    // Dark uses a crescent SVG (inline, no emoji); Light uses ☀.
-    var iconMap  = { dark: '\u263D', light: '\u2600' };
+    var iconMap  = { dark: 'fa-moon', light: 'fa-sun' };
     var labelMap = { dark: 'Dark', light: 'Light' };
 
     function refresh() {
       var next = nextState(getState());
-      btn.textContent = iconMap[next] + '\u00a0' + labelMap[next];
+      btn.innerHTML = '<i class="crm-i ' + iconMap[next] + '" aria-hidden="true"></i>\u00a0' + labelMap[next];
       btn.title = 'Switch to ' + labelMap[next];
     }
 

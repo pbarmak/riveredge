@@ -377,7 +377,7 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
     display: block !important;
     border: none !important;
     width: 100% !important;
-    padding-bottom: 80px;
+    padding-bottom: 120px;
   }
 
   .crm-container table.dataTable tbody,
@@ -631,6 +631,16 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
     font-weight: bold;
     color: var(--crm-link-color);
     background: var(--crm-layer1-bg-color);
+  }
+}
+
+/* Light mode: the default hover var (--crm-layer2-bg-color = #ebeff0) is
+   barely different from the button's own bg (--crm-layer1-bg-color = #f3f6f7)
+   and actually lighter — use gray-300 for a clearly visible focus/hover state. */
+@media (max-width: 767px) {
+  html[data-riveredge-theme="light"] .riveredge-tab-btn:hover,
+  html[data-riveredge-theme="light"] .riveredge-tab-btn:focus {
+    background: #005893;
   }
 }
 

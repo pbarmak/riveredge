@@ -159,7 +159,43 @@
 
   stampAll();
 
-  /* ─── 4. Contact tabs → hamburger menu (mobile) ─────────────────────────── */
+  /* ─── 4. Action-link → collapsible accordion (mobile only) ──────────────── */
+
+  function buildActionAccordion(root) {
+    (root || document).querySelectorAll('.crm-container .action-link').forEach(function (al) {
+      if (al.dataset.riveredgeAccordion === 'done') return;
+      al.dataset.riveredgeAccordion = 'done';
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'riveredge-action-toggle';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.innerHTML =
+        '<span class="crm-i fa-caret-right" aria-hidden="true"></span>' +
+        '<span class="riveredge-action-label">Actions</span>' +
+        '<span class="riveredge-action-caret" aria-hidden="true">&#9662;</span>';
+
+      var body = document.createElement('div');
+      body.className = 'riveredge-action-body';
+
+      // Move all existing children (the <a> buttons) into the body.
+      while (al.firstChild) { body.appendChild(al.firstChild); }
+
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        body.classList.toggle('open', !open);
+      });
+
+      al.appendChild(btn);
+      al.appendChild(body);
+      al.classList.add('riveredge-action-accordion');
+    });
+  }
+
+  buildActionAccordion();
+
+  /* ─── 5. Contact tabs → hamburger menu (mobile) ─────────────────────────── */
 
   function getTabLabel(li) {
     var a = li.querySelector('a');
@@ -444,6 +480,7 @@
     CRM.$(document).on('draw.dt',          function (e) { stampTable(e.target); });
     CRM.$(document).on('crmLoad',          function (e) {
       stampAll(e.target);
+      buildActionAccordion(e.target);
       handleTabs();
       // CiviCRM's AJAX (tab pagination etc.) resets panel style.display to ''
       // after loading new content, causing our CSS to re-hide the active panel.

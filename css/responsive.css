@@ -254,6 +254,7 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
 
   #block-claro-content .crm-container:not(.crm-public) .form-item, #block-claro-content .crm-container .button {
     margin-bottom: 10px;
+    width: 100%;
   }
 
   /* ── Mobile form layout: stack labels above fields ────────────────────── */
@@ -335,6 +336,86 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
   nav#civicrm-menu-nav .crm-menubar-toggle-btn {
 	  margin-top: 5px;
     padding-right: 10px;
+  }
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   6b. Action-link accordion  (mobile only)
+   JS wraps .action-link children in .riveredge-action-body and prepends a
+   .riveredge-action-toggle button.  Desktop: toggle hidden, body visible as
+   normal inline flow.  Mobile: toggle shown, body collapsed until opened.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Desktop: hide toggle, body acts as transparent wrapper so the <a> buttons
+   remain in their normal inline flow inside .action-link.
+   !important needed because .crm-container button rules can override display:none. */
+.riveredge-action-toggle {
+  display: none !important;
+}
+.riveredge-action-body {
+  display: contents;
+}
+
+@media (max-width: 768px) {
+  /* Toggle button — full-width, styled like a CiviCRM accordion header */
+  .riveredge-action-toggle {
+    display: flex !important;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 1rem;
+    background: var(--crm-accordion-header-bg-color);
+    color: var(--crm-accordion-header-color, var(--crm-text-color));
+    border: none;
+    border-radius: var(--crm-l-radius);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    font-family: inherit;
+    text-align: left;
+  }
+
+  .riveredge-action-toggle:hover,
+  .riveredge-action-toggle:focus {
+    background: #005893;
+    outline: none;
+  }
+
+  html[data-riveredge-theme="light"] .riveredge-action-toggle:hover,
+  html[data-riveredge-theme="light"] .riveredge-action-toggle:focus {
+    background: var(--crm-c-gray-300, #cad5d7);
+  }
+
+  .riveredge-action-caret {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+  }
+
+  .riveredge-action-toggle[aria-expanded="true"] .riveredge-action-caret {
+    transform: rotate(180deg);
+  }
+
+  /* Body — hidden when collapsed, flex column when open */
+  .riveredge-action-body {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .riveredge-action-body.open {
+    display: flex;
+  }
+
+  /* Each button fills the full width on mobile */
+  .riveredge-action-body .button,
+  .riveredge-action-body a.button,
+  .riveredge-action-body a.crm-popup.button {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start;
   }
 }
 

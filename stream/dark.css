@@ -102,8 +102,10 @@
 }
 
 /* Summernote editable area — give it a light background so text (which the
-   dark theme may force to light colours via inheritance) stays readable. */
-.note-editable {
-  background: #f0f2f5 !important;
+   dark theme may force to light colours via inheritance) stays readable.
+   .note-editable.valid covers form-validated instances (e.g. event edit). */
+.note-editable,
+.note-editable.valid {
+  background: #828386 !important;
   color: #1a1a1a !important;
 }

@@ -58,6 +58,10 @@
   box-sizing: border-box;
   overflow-x: auto;
 }
+.crm-inline-edit.form {
+  max-width: 100% !important;
+  min-width: 100% !important;
+}
 
 /* Entity view pages (contribution, contact, event, etc.) —
    table.crm-info-panel has no label-column width in RiverLea, so td.label
@@ -420,6 +424,17 @@ body:has(.crm-contact-page) [class*="region-highlighted"] {
   nav#civicrm-menu-nav .crm-menubar-toggle-btn {
 	  margin-top: 5px;
     padding-right: 10px;
+  }
+
+  /* btn-slide dropdowns (e.g. Configure/Participants on event manage) —
+     right-align the panel so it doesn't overflow off the left edge. */
+  .btn-slide {
+    position: relative;
+  }
+  .btn-slide ul.panel {
+    left: 0 !important;
+    right: 0;
+    min-width: max-content;
   }
 }
 
@@ -979,14 +994,19 @@ html[data-riveredge-theme="dark"] #block-claro-content {
 html[data-riveredge-theme="dark"] {
   --crm-alert-danger-bg-color: #3d1520;
   --crm-alert-danger-text-color: #f0aabb;
+  /* SearchKit draggable field rows use --crm-drag-bg-color */
+  --crm-drag-bg-color: #282c38;
 }
 
 /* Summernote editable area — light background so inherited dark text colours
-   stay readable when editing. */
-html[data-riveredge-theme="dark"] .note-editable {
-  background: #a7a7a8 !important;
+   stay readable when editing.
+   .note-editable.valid covers form-validated instances (e.g. event edit). */
+html[data-riveredge-theme="dark"] .note-editable,
+html[data-riveredge-theme="dark"] .note-editable.valid {
+  background: #888a8f !important;
   color: #1a1a1a !important;
 }
+
 
 /* CiviCRM content containers — slightly lighter than page bg */
 html[data-riveredge-theme="dark"] .crm-container,

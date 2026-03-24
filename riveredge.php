@@ -26,8 +26,12 @@ function riveredge_civicrm_install(): void {}
 
 /**
  * Implements hook_civicrm_enable().
+ * Set both frontend and backend themes to riveredge on enable.
  */
-function riveredge_civicrm_enable(): void {}
+function riveredge_civicrm_enable(): void {
+  \Civi::settings()->set('theme_frontend', 'riveredge');
+  \Civi::settings()->set('theme_backend', 'riveredge');
+}
 
 /**
  * Loads responsive CSS and the dark-mode/accordion JS whenever a RiverLea

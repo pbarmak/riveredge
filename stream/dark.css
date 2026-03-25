@@ -1,5 +1,5 @@
 /*
-  River Edge — dark mode variables.
+  RiverEdge — dark mode variables.
   Loaded by RiverLea inside @media (prefers-color-scheme: dark) when the
   stream's dark_backend is set to 'inherit'.
   Also duplicated under html[data-riveredge-theme="dark"] in responsive.css

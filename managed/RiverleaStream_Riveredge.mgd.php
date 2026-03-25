@@ -13,7 +13,7 @@
  * override this via a data attribute on <html>.
  *
  * To activate: Administer → Customize Data and Screens → Display Preferences
- * → Theme Settings → select "River Edge".
+ * → Theme Settings → select "RiverEdge".
  */
 return [
   [
@@ -25,7 +25,7 @@ return [
       'version' => 4,
       'values'  => [
         'name'         => 'riveredge',
-        'label'        => 'River Edge',
+        'label'        => 'RiverEdge',
         'description'  => 'Custom stream based on Walbrook with full-width contact layout, larger nav font, and per-user dark mode.',
         'extension'    => 'riveredge',
         'file_prefix'  => 'stream/',

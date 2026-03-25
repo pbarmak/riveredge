@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="riveredge" type="module">
   <file>riveredge</file>
-  <name>River Edge Theme</name>
+  <name>RiverEdge Theme</name>
   <description>A custom RiverLea child stream with dark mode improvements, mobile-responsive admin UI, accordion contact tabs, and full-width contact summary layout. Based on the Walbrook stream.</description>
   <license>MIT</license>
   <maintainer>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * River Edge - CiviCRM extension providing a custom RiverLea child stream.
+ * RiverEdge - CiviCRM extension providing a custom RiverLea child stream.
  *
  * Provides:
  * - 'riveredge' stream (based on Walbrook) with full-width contact layout

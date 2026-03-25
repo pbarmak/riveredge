@@ -1,5 +1,5 @@
 /**
- * River Edge — riveredge.js
+ * RiverEdge — riveredge.js
  *
  * Loaded in page-footer region so the DOM is fully built when this runs.
  * document.body is always available — no DOMContentLoaded dance needed.

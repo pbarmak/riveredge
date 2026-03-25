@@ -1,5 +1,5 @@
 /*
-  River Edge — responsive.css
+  RiverEdge — responsive.css
   Loaded at weight 150 (after river.css at 100, after RiverLea core at -100…-99).
 
   Sections:
@@ -949,7 +949,7 @@ html[data-riveredge-theme="dark"] {
   --crm-contact-label-bg-color: transparent;
   --crm-dialog-header-border-color: transparent;
 
-  /* River Edge dark stream overrides */
+  /* RiverEdge dark stream overrides */
   --crm-c-gray-800: #1e2129;
   --crm-c-gray-700: #2d3140;
   --crm-c-gray-600: #55596a;

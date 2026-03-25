@@ -1,4 +1,4 @@
-# River Edge — CiviCRM Theme Extension
+# RiverEdge — CiviCRM Theme Extension
 
 A custom [RiverLea](https://github.com/civicrm/riverlea) child stream for CiviCRM that adds dark mode, a per-user theme toggle, mobile-responsive admin UI, and a full-width contact summary layout.
 
@@ -32,9 +32,9 @@ A custom [RiverLea](https://github.com/civicrm/riverlea) child stream for CiviCR
    git clone git@github.com:pbarmak/riveredge.git riveredge
    ```
 
-2. In CiviCRM, go to **Administer → System Settings → Extensions** and install **River Edge Theme**.
+2. In CiviCRM, go to **Administer → System Settings → Extensions** and install **RiverEdge Theme**.
 
-3. Activate the stream at **Administer → Customize Data and Screens → Display Preferences → Theme Settings** and select **River Edge**.
+3. Activate the stream at **Administer → Customize Data and Screens → Display Preferences → Theme Settings** and select **RiverEdge**.
 
 ---
 

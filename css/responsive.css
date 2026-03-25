@@ -231,6 +231,18 @@
     position: fixed !important;
     background-color: var(--crm-menubar-color, #222831) !important;
   }
+
+  /* Hide Drupal toolbar-tab (user account tray) on mobile — it appears above
+     CRM content and serves no useful purpose on small screens. */
+  .toolbar-tab {
+    display: none !important;
+  }
+
+  /* The toolbar-tab previously acted as a spacer between the fixed nav bar and
+     the contact name block. Restore that gap now that the tab is hidden. */
+  .crm-summary-contactname-block {
+    margin-top: 1.5rem;
+  }
 }
 
 

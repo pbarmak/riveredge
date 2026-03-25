@@ -3,10 +3,10 @@
   <file>riveredge</file>
   <name>River Edge Theme</name>
   <description>A custom RiverLea child stream with dark mode improvements, mobile-responsive admin UI, accordion contact tabs, and full-width contact summary layout. Based on the Walbrook stream.</description>
-  <license>AGPL-3.0</license>
+  <license>MIT</license>
   <maintainer>
-    <author>Site Administrator</author>
-    <email>admin@example.com</email>
+    <author>Forward Edge</author>
+    <email>info@forwardedge.org</email>
   </maintainer>
   <releaseDate>2026-03-23</releaseDate>
   <version>1.0.0</version>

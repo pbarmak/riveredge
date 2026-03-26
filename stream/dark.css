@@ -101,6 +101,14 @@
   --crm-filter-bg-color: var(--crm-c-blue-dark);
 }
 
+/* Any item with .highlighted (SmartMenus sets this on the hovered/focused item
+   and its open ancestors). Without this, the PHP $highlightColor (typically a
+   light accent) bleeds through at every level in dark mode. */
+#civicrm-menu a.highlighted {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f0f2f5 !important;
+}
+
 /* Select2 multi-value search input — select2's stylesheet hardcodes
    background:white on .select2-input; override it for dark mode. */
 .select2-container-multi .select2-choices .select2-input {

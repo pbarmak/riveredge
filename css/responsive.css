@@ -1049,6 +1049,14 @@ html[data-riveredge-theme="dark"] body #riveredge-theme-toggle:hover {
   color: #fff !important;
 }
 
+/* Any item with .highlighted (SmartMenus sets this on the hovered/focused item
+   and its open ancestors). Without this, the PHP $highlightColor (typically a
+   light accent) bleeds through at every level in dark mode. */
+html[data-riveredge-theme="dark"] body #civicrm-menu a.highlighted {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+}
+
 /* Drupal page background — forced dark.
    Only override background; let CSS variables handle text colour so we
    don't clobber the dark contact header's white text via inheritance. */

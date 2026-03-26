@@ -1069,6 +1069,13 @@ html[data-riveredge-theme="dark"] {
   --crm-drag-bg-color: #282c38;
 }
 
+/* Select2 multi-value search input — select2's stylesheet hardcodes
+   background:white on .select2-input; override it for dark mode. */
+html[data-riveredge-theme="dark"] .select2-container-multi .select2-choices .select2-input {
+  background-color: #242836 !important;
+  color: #f0f2f5 !important;
+}
+
 /* Summernote editable area — light background so inherited dark text colours
    stay readable when editing.
    .note-editable.valid covers form-validated instances (e.g. event edit). */

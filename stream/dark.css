@@ -101,6 +101,13 @@
   --crm-filter-bg-color: var(--crm-c-blue-dark);
 }
 
+/* Select2 multi-value search input — select2's stylesheet hardcodes
+   background:white on .select2-input; override it for dark mode. */
+.select2-container-multi .select2-choices .select2-input {
+  background-color: #242836 !important;
+  color: var(--crm-text-light-color) !important;
+}
+
 /* Summernote editable area — give it a light background so text (which the
    dark theme may force to light colours via inheritance) stays readable.
    .note-editable.valid covers form-validated instances (e.g. event edit). */

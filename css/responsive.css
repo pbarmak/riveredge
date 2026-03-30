@@ -1166,3 +1166,76 @@ html[data-riveredge-theme="light"] #crm-main,
 html[data-riveredge-theme="light"] .crm-content-block {
   background-color: #fff !important;
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   10. Mobile: contact image — push down so it clears the contact name
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (max-width: 767px) {
+  :root {
+    --crm-contact-image-top: 80px;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   11. Quick search results dropdown
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Separator lines between results (both modes) */
+ul.crm-quickSearch-results li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+ul.crm-quickSearch-results li:last-child {
+  border-bottom: none;
+}
+ul.crm-quickSearch-results a {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+
+/* Dark mode: use the dark container background instead of the browser default */
+@media (prefers-color-scheme: dark) {
+  ul.crm-quickSearch-results {
+    background-color: #242836;
+    color: #f0f2f5;
+  }
+  ul.crm-quickSearch-results li {
+    border-bottom-color: rgba(255, 255, 255, 0.07);
+  }
+  ul.crm-quickSearch-results a {
+    color: var(--crm-c-amber);
+  }
+  ul.crm-quickSearch-results .ui-state-active {
+    background: #3a3f58;
+  }
+}
+
+/* JS light-mode toggle — override OS dark preference */
+html[data-riveredge-theme="light"] ul.crm-quickSearch-results {
+  background-color: #fff;
+  color: #34303b;
+}
+html[data-riveredge-theme="light"] ul.crm-quickSearch-results li {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+html[data-riveredge-theme="light"] ul.crm-quickSearch-results a {
+  color: #005893;
+}
+html[data-riveredge-theme="light"] ul.crm-quickSearch-results .ui-state-active {
+  background: var(--crm-c-blue);
+}
+
+/* JS dark-mode toggle */
+html[data-riveredge-theme="dark"] ul.crm-quickSearch-results {
+  background-color: #242836;
+  border-color: #4e5470;
+  color: #f0f2f5;
+}
+html[data-riveredge-theme="dark"] ul.crm-quickSearch-results li {
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+html[data-riveredge-theme="dark"] ul.crm-quickSearch-results a {
+  color: var(--crm-c-amber);
+}
+html[data-riveredge-theme="dark"] ul.crm-quickSearch-results .ui-state-active {
+  background: #3a3f58;
+}

@@ -76,6 +76,22 @@
 .crm-inline-edit.form {
   max-width: 100% !important;
   min-width: 100% !important;
+  /* CiviCRM JS also injects overflow:hidden — allow horizontal scroll so the
+     table columns aren't clipped on viewports narrower than 2560 px. */
+  overflow-x: auto !important;
+}
+
+/* ── Email inline-edit: make the table fit the available column width ──────
+   The table has 5 columns; at mid-range widths it exceeds the container.
+   width:100% + flexible email input lets it compress without scrolling.
+   min-width on the input keeps it usable on mobile.                        */
+.crm-summary-email-block table.crm-inline-edit-form {
+  width: 100%;
+}
+.crm-summary-email-block table.crm-inline-edit-form input[type="email"] {
+  width: 100%;
+  min-width: 6em;
+  box-sizing: border-box;
 }
 
 /* Entity view pages (contribution, contact, event, etc.) —

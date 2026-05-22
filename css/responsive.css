@@ -991,6 +991,10 @@ html[data-riveredge-theme="dark"] {
   --crm-alert-success-bg-color: #1c3d2a;
   --crm-alert-success-border-color: #2d6645;
   --crm-alert-success-text-color: #88dca8;
+  /* Alert warning — dark amber bg with readable light-amber text */
+  --crm-alert-warning-bg-color: #3a2c10;
+  --crm-alert-warning-border-color: #5e4318;
+  --crm-alert-warning-text-color: #f0c878;
   /* Alert info — dark blue bg with readable light-blue text */
   --crm-alert-info-bg-color: #0f2a3d;
   --crm-alert-info-border-color: #1e5278;
@@ -1008,6 +1012,7 @@ html[data-riveredge-theme="dark"] {
   --crm-dashlet-header-bg-color: var(--crm-layer1-bg-color);
   --crm-dropdown-bg-color: var(--crm-container-bg-color);
   --crm-dropdown2-bg-color: var(--crm-container-bg-color);
+  --crm-dropdown-hover-bg-color: var(--crm-layer2-bg-color);
   --crm-notify-bg-color: var(--crm-container-bg-color);
   --crm-wizard-bg-color: var(--crm-container-bg-color);
   --crm-panel-bg-color: var(--crm-container-bg-color);
@@ -1091,6 +1096,22 @@ html[data-riveredge-theme="dark"] {
   --crm-alert-danger-text-color: #f0aabb;
   /* SearchKit draggable field rows use --crm-drag-bg-color */
   --crm-drag-bg-color: #282c38;
+}
+
+/* SearchKit admin renders #bootstrap-theme outside .crm-container */
+html[data-riveredge-theme="dark"] #bootstrap-theme .dropdown-menu {
+  background-color: var(--crm-dropdown-bg-color, var(--crm-container-bg-color)) !important;
+  color: var(--crm-dropdown-color, var(--crm-text-light-color));
+}
+html[data-riveredge-theme="light"] #bootstrap-theme .dropdown-menu {
+  background-color: var(--crm-dropdown-bg-color, #fff) !important;
+  color: var(--crm-dropdown-color, var(--crm-text-color));
+}
+
+/* SearchKit tree collapse toggle — core uses --crm-c-gray-200 which is light. */
+html[data-riveredge-theme="dark"] #bootstrap-theme .crm-search-display-tree-collapse-toggle {
+  background: var(--crm-primary-color);
+  color: var(--crm-primary-text-color);
 }
 
 /* Select2 multi-value search input — select2's stylesheet hardcodes

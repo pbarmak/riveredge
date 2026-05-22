@@ -219,6 +219,14 @@
   --crm-dashlet-header-padding: var(--crm-padding-reg);
   --crm-dashlet-tabs-border: var(--crm-tabs-border);
 
+/* ─── Dropdowns ───────────────────────────────────────────────────────────── */
+  /* Core defaults to var(--crm-secondary-hover-color) via color-mix(), which
+     collapses to transparent when the chain fails. Pin to an explicit value. */
+  --crm-dropdown-bg-color: #fff;
+  --crm-dropdown2-bg-color: #fff;
+  --crm-dropdown-color: var(--crm-text-color);
+  --crm-dropdown-hover-bg-color: var(--crm-c-gray-100);
+
 /* ─── Notifications ───────────────────────────────────────────────────────── */
   --crm-notify-bg-color: var(--crm-paper);
   --crm-notify-color: var(--crm-text-color);
@@ -248,4 +256,11 @@
   --crm-f-label-align: left;
   --crm-f-label-margin: 0;
   --crm-f-label-width: unset;
+}
+
+/* SearchKit admin: pin dropdown-menu background so it never falls through to
+   transparent when --crm-dropdown-bg-color can't resolve via color-mix(). */
+#bootstrap-theme .dropdown-menu {
+  background-color: var(--crm-dropdown-bg-color, #fff);
+  color: var(--crm-dropdown-color, var(--crm-text-color));
 }

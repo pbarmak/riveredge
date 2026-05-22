@@ -99,7 +99,7 @@
     wrapper.appendChild(btn);
     document.body.appendChild(wrapper);
     positionToggle();
-    console.log('[riveredge] toggle injected');
+
   }
 
   // Inject now (DOM is ready — we are in page-footer).
@@ -559,22 +559,80 @@
 
   // Flip Bootstrap dropdown menus upward when they would overflow the viewport
   // bottom — prevents the last card's action menu from being clipped.
+  // Uses capture phase so we pre-position BEFORE Bootstrap adds .open, eliminating
+  // the one-frame flash where the menu briefly appears in the wrong position.
   document.addEventListener('click', function (e) {
     var btn = e.target && e.target.closest && e.target.closest('[data-toggle="dropdown"]');
     if (!btn) return;
     var group = btn.closest('.btn-group') || btn.closest('.dropdown');
     if (!group) return;
-    // Wait one tick for Bootstrap to open the menu, then measure and flip if needed.
-    setTimeout(function () {
-      var menu = group.querySelector('.dropdown-menu');
-      if (!menu) return;
-      var rect = menu.getBoundingClientRect();
-      if (rect.bottom > window.innerHeight) {
-        group.classList.add('dropup');
+    var menu = group.querySelector('.dropdown-menu');
+    if (!menu) return;
+
+    if (group.classList.contains('open')) {
+      // Menu is currently open — user is closing it; remove dropup.
+      group.classList.remove('dropup');
+      return;
+    }
+
+    // Measure menu height off-screen (position:fixed, visibility:hidden) so we
+    // can decide before Bootstrap paints the open menu.
+    var prev = menu.style.cssText;
+    menu.style.cssText = prev + ';display:block!important;visibility:hidden!important;position:fixed!important;top:-9999px!important;left:-9999px!important';
+    var menuHeight = menu.getBoundingClientRect().height;
+    menu.style.cssText = prev;
+
+    var btnRect = btn.getBoundingClientRect();
+    if (btnRect.bottom + menuHeight > window.innerHeight) {
+      group.classList.add('dropup');
+    } else {
+      group.classList.remove('dropup');
+    }
+  }, true); // capture phase: fires before Bootstrap's dropdown handler
+
+  /* ─── 6b. Dropdown background fix ─────────────────────────────────────── */
+  /* On some Angular admin pages (e.g. SearchKit) the .dropdown-menu is opened
+     with display:flex (RiverLea rule). Under these conditions height:auto
+     computes to 8px — only the padding; items don't contribute to the flex
+     main axis. The visible result is a transparent-looking dropdown because
+     the background box is only 8px tall.
+     MutationObserver fires on the .open class change (not a click event), so
+     ordering is deterministic and outside-click closes are also caught so
+     stale inline styles are always cleaned up.                                */
+  new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      var el = mutations[i].target;
+      if (!el.classList.contains('btn-group') && !el.classList.contains('dropdown')) continue;
+      var menu = el.querySelector(':scope > .dropdown-menu');
+      if (!menu) continue;
+      if (el.classList.contains('open')) {
+        var bg = window.getComputedStyle(document.documentElement)
+                   .getPropertyValue('--crm-dropdown-bg-color').trim() || '#fff';
+        menu.style.setProperty('background-color', bg, 'important');
+        // height:auto computes to 8px (flex layout anomaly — items don't
+        // contribute to the main axis). Expand to 2000px so items lay out at
+        // their natural sizes, then trim to actual content height in rAF
+        // (fires before the first paint, so no visible 2000px flash).
+        menu.style.setProperty('height', '2000px', 'important');
+        (function (m, g) {
+          requestAnimationFrame(function () {
+            if (!g.classList.contains('open')) return;
+            var last = m.lastElementChild;
+            if (!last) return;
+            var padB = parseFloat(window.getComputedStyle(m).paddingBottom) || 4;
+            var h = last.getBoundingClientRect().bottom - m.getBoundingClientRect().top + padB;
+            if (h > 8) m.style.setProperty('height', Math.ceil(h) + 'px', 'important');
+          });
+        }(menu, el));
       } else {
-        group.classList.remove('dropup');
+        menu.style.removeProperty('background-color');
+        menu.style.removeProperty('height');
       }
-    }, 0);
+    }
+  }).observe(document.documentElement, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class']
   });
 
   var _rz;

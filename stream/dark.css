@@ -32,7 +32,6 @@
 /* ─── Emphasis colours ────────────────────────────────────────────────────── */
   --crm-success-color: var(--crm-c-green-dark);
   --crm-warning-text-color: var(--crm-text-dark-color);
-  --crm-alert-warning-text-color: var(--crm-text-dark-color);
   --crm-info-color: var(--crm-c-blue-dark);
 
 /* ─── Shadows (deeper in dark mode) ──────────────────────────────────────── */
@@ -84,6 +83,7 @@
 /* ─── Dropdowns ───────────────────────────────────────────────────────────── */
   --crm-dropdown-bg-color: var(--crm-container-bg-color);
   --crm-dropdown2-bg-color: var(--crm-container-bg-color);
+  --crm-dropdown-hover-bg-color: var(--crm-layer2-bg-color);
 
 /* ─── Notifications ───────────────────────────────────────────────────────── */
   --crm-notify-bg-color: var(--crm-container-bg-color);
@@ -93,12 +93,26 @@
   --crm-wizard-active-bg-color: var(--crm-primary-color);
   --crm-wizard-active-color: var(--crm-primary-text-color);
 
-/* ─── Alerts — tone down danger/error in dark mode ───────────────────────── */
+/* ─── Alerts — tone down danger/warning in dark mode ─────────────────────── */
+  --crm-alert-warning-bg-color: #3a2c10;
+  --crm-alert-warning-text-color: #f0c878;
   --crm-alert-danger-bg-color: #3d1520;
   --crm-alert-danger-text-color: #f0aabb;
 
 /* ─── Alpha filter ────────────────────────────────────────────────────────── */
   --crm-filter-bg-color: var(--crm-c-blue-dark);
+}
+
+/* SearchKit admin renders #bootstrap-theme outside .crm-container */
+#bootstrap-theme .dropdown-menu {
+  background-color: var(--crm-dropdown-bg-color, var(--crm-container-bg-color)) !important;
+  color: var(--crm-dropdown-color, var(--crm-text-light-color));
+}
+
+/* SearchKit tree collapse toggle — core uses --crm-c-gray-200 which is light. */
+#bootstrap-theme .crm-search-display-tree-collapse-toggle {
+  background: var(--crm-primary-color);
+  color: var(--crm-primary-text-color);
 }
 
 /* Any item with .highlighted (SmartMenus sets this on the hovered/focused item

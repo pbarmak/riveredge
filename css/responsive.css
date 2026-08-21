@@ -460,6 +460,18 @@ a.shortcut-action.shortcut-action--add {
     padding-inline: 0;
   }
 
+  /* CRM/Core/Form/RecurringEntity.tpl (the "Repeat" accordion) toggles rows
+     with jQuery .hide()/.show(), which sets an inline display:none. The
+     blanket "display: block !important" above beats that inline style,
+     re-showing fields the widget deliberately hid (e.g. "day of the month"
+     when frequency isn't "month") — jQuery Validate then treats them as
+     visible+required and blocks save. Higher-specificity selector restores
+     the hidden state so the widget's own show/hide logic wins. */
+  .crm-container .crm-core-form-recurringentity-block td[style*="display: none"],
+  .crm-container .crm-core-form-recurringentity-block td[style*="display:none"] {
+    display: none !important;
+  }
+
   /* Remove top padding on content cell — label above provides spacing */
   .crm-container table.form-layout td.content,
   .crm-container table.form-layout-compressed td.content {

@@ -21,6 +21,22 @@
   --crm-focus-color: var(--crm-link-color);
   --crm-inactive-color: var(--crm-c-gray-400);
   --crm-paper: var(--crm-c-darkest);
+  /* main.css sets these for light mode; without an override here they stay
+     dark-on-dark whenever the OS preference (not the manual toggle) is what
+     triggers dark mode. Kept in sync with the html[data-riveredge-theme="dark"]
+     block in responsive.css. */
+  --crm-text-color: var(--crm-text-light-color);
+  --crm-border-color: var(--crm-c-gray-500);
+  --crm-ink: var(--crm-text-light-color);
+  --crm-heading-color: var(--crm-text-light-color);
+  --crm-primary-ink-color: var(--crm-c-gray-300);
+  --crm-secondary-ink-color: #cdcdcd;
+  --crm-success-ink-color: var(--crm-success-light-color);
+  --crm-warning-ink-color: var(--crm-warning-light-color);
+  --crm-danger-ink-color: var(--crm-danger-light-color);
+  --crm-info-ink-color: var(--crm-info-light-color);
+  --crm-menubar-item-color: transparent;
+  --crm-menubar-text-color: #f0f2f5;
 
 /* ─── Backgrounds ─────────────────────────────────────────────────────────── */
   --crm-page-bg-color: #12141a;
@@ -98,6 +114,12 @@
   --crm-alert-warning-text-color: #f0c878;
   --crm-alert-danger-bg-color: #3d1520;
   --crm-alert-danger-text-color: #f0aabb;
+  --crm-alert-success-bg-color: #1c3d2a;
+  --crm-alert-success-border-color: #2d6645;
+  --crm-alert-success-text-color: #88dca8;
+  --crm-alert-info-bg-color: #0f2a3d;
+  --crm-alert-info-border-color: #1e5278;
+  --crm-alert-info-text-color: #7ec8f0;
 
 /* ─── Alpha filter ────────────────────────────────────────────────────────── */
   --crm-filter-bg-color: var(--crm-c-blue-dark);

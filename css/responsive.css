@@ -125,6 +125,20 @@
   max-width: 100%;
 }
 
+/* Import Contacts step 3 "Tag imported records": core wraps the tag <select>
+   in <td class="listing-box">, a class RiverLea reserves for checkbox-list
+   rows (_components.css: ".listing-box > div { display:grid;
+   grid-template-columns: var(--crm-l-reg) 100%; }"). That grid rule
+   incorrectly matches the select2-container div select2.js renders as a
+   child of the <td>, squeezing the selected-tag chip into a ~1rem-wide
+   column so selections appear invisible. Exempt select2 widgets from it. */
+.crm-container .listing-box > .select2-container,
+.crm-container .listing-box-tall > .select2-container {
+  display: block !important;
+  width: var(--crm-input-width, 15em) !important;
+  max-width: 100%;
+}
+
 /* Dashboard inactive-dashlet header — restore normal font size */
 .crm-container .crm-inactive-dashlet .crm-dashlet-header h3 {
   font-size: 100% !important;
@@ -1150,6 +1164,35 @@ html[data-riveredge-theme="dark"] .crm-content-block {
   background-color: #1a1d25 !important;
 }
 
+/* System Status page (#/status) severity headers — core (RiverLea) sets these
+   from --crm-info-color/--crm-success-color/--crm-warning-color, which this
+   stream doesn't override for the manual dark toggle, so they stay at their
+   pastel light-mode values and read as too washed-out against the dark page.
+   Darken them a bit here, scoped to this page only so other consumers of
+   those variables (buttons, badges, notifications) are unaffected. Text stays
+   dark since these are still light/mid-tone backgrounds. */
+html[data-riveredge-theme="dark"] #crm-status-list .crm-severity-notice {
+  background-color: #5b9bd1 !important;
+  color: #fff !important;
+}
+html[data-riveredge-theme="dark"] #crm-status-list .crm-severity-info,
+html[data-riveredge-theme="dark"] #crm-status-list .crm-severity-debug {
+  background-color: #4fae7f !important;
+  color: #fff !important;
+}
+html[data-riveredge-theme="dark"] #crm-status-list .crm-severity-warning {
+  background-color: #d9a35c !important;
+  color: #fff !important;
+}
+
+/* "Hide" button on each status header — core styles it as a flat 60%-opacity
+   white wash (rgba(255,255,255,.6)) that blends into whatever severity color
+   sits behind it. Give it a solid, theme-independent look in dark mode. */
+html[data-riveredge-theme="dark"] #crm-status-list .hush-menu button {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  color: #fff !important;
+}
+
 /* ── Force LIGHT (override OS dark preference) ───────────────────────────── */
 html[data-riveredge-theme="light"] {
   color-scheme: light;
@@ -1255,6 +1298,27 @@ ul.crm-quickSearch-results a {
   }
   ul.crm-quickSearch-results .ui-state-active {
     background: #3a3f58;
+  }
+
+  /* System Status page severity headers + "Hide" button — see the matching
+     html[data-riveredge-theme="dark"] rules above for the rationale; this
+     covers users on the OS dark-mode preference instead of the manual toggle. */
+  #crm-status-list .crm-severity-notice {
+    background-color: #5b9bd1 !important;
+    color: #fff !important;
+  }
+  #crm-status-list .crm-severity-info,
+  #crm-status-list .crm-severity-debug {
+    background-color: #4fae7f !important;
+    color: #fff !important;
+  }
+  #crm-status-list .crm-severity-warning {
+    background-color: #d9a35c !important;
+    color: #fff !important;
+  }
+  #crm-status-list .hush-menu button {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    color: #fff !important;
   }
 }
 

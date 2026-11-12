@@ -81,7 +81,7 @@
 
     function refresh() {
       var next = nextState(getState());
-      btn.innerHTML = '<i class="crm-i ' + iconMap[next] + '" aria-hidden="true"></i>\u00a0' + labelMap[next];
+      btn.innerHTML = '<i class="crm-i ' + iconMap[next] + '" aria-hidden="true"></i><span class="riveredge-toggle-label">\u00a0' + labelMap[next] + '</span>';
       btn.title = 'Switch to ' + labelMap[next];
     }
 
@@ -223,6 +223,22 @@
   }
 
   buildActionAccordion();
+
+  /* ─── 4b. Contact Actions menu: position under the button (mobile) ───────── */
+  // CSS makes the panel position:fixed + full width on mobile; it only needs
+  // its top set. Runs after core's click handler has shown the panel.
+  document.addEventListener('click', function (e) {
+    if (!window.matchMedia('(max-width: 767px)').matches) return;
+    var link = e.target && e.target.closest && e.target.closest('#crm-contact-actions-link');
+    if (!link) return;
+    setTimeout(function () {
+      var list = document.getElementById('crm-contact-actions-list');
+      if (!list) return;
+      var r = link.getBoundingClientRect();
+      list.style.top = (r.bottom + 4) + 'px';
+      list.style.maxHeight = 'calc(100vh - ' + (r.bottom + 12) + 'px)';
+    }, 0);
+  });
 
   /* ─── 5. Contact tabs → hamburger menu (mobile) ─────────────────────────── */
 
@@ -398,9 +414,14 @@
     function openMenu() {
       // Use position:fixed with JS coords so no ancestor overflow/grid clips the dropdown.
       var rect = bar.getBoundingClientRect();
+      // When the bar lives inside the Actions/Edit ribbon, span the ribbon's
+      // full width rather than the (narrow) button.
+      var span = bar.classList.contains('riveredge-tab-bar-inline')
+        ? (bar.closest('.crm-actions-ribbon') || bar).getBoundingClientRect()
+        : rect;
       menu.style.top   = rect.bottom + 'px';
-      menu.style.left  = rect.left   + 'px';
-      menu.style.width = rect.width  + 'px';
+      menu.style.left  = span.left   + 'px';
+      menu.style.width = span.width  + 'px';
       btn.setAttribute('aria-expanded', 'true');
       menu.classList.add('open');
     }
@@ -424,6 +445,16 @@
     bar.appendChild(btn);
     bar.appendChild(menu);
     tc.insertBefore(bar, tc.firstChild);
+
+    // Mobile: put the tab button on the same row as Actions / Edit.
+    var ribbon_list = document.querySelector('.crm-actions-ribbon ul#actions');
+    if (ribbon_list) {
+      var bar_li = document.createElement('li');
+      bar_li.className = 'riveredge-tab-bar-li';
+      bar.classList.add('riveredge-tab-bar-inline');
+      bar_li.appendChild(bar);
+      ribbon_list.insertBefore(bar_li, ribbon_list.firstChild);
+    }
 
     // Set _riveredgeTabData BEFORE selectTab so the tabsactivate handler triggered
     // by selectTab (and any concurrent CiviCRM tab switches) can use it.

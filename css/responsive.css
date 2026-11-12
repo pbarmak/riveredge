@@ -262,6 +262,72 @@
     background-color: var(--crm-menubar-color, #222831) !important;
   }
 
+  /* Mobile menu: theme toggle moves to the left icon-only, right of the
+     hamburger (inline styles set right:80px, hence !important). */
+  #riveredge-theme-toggle-wrapper {
+    top: 0 !important;
+    height: 50px !important;
+    right: 72px !important;
+    left: auto !important;
+  }
+  #riveredge-theme-toggle .riveredge-toggle-label {
+    display: none;
+  }
+  #riveredge-theme-toggle {
+    padding: 0 9px !important;
+  }
+  .page-title {
+    font-size: 1.25rem !important;
+  }
+
+  /* Mobile menu panel: full width, pinned under the nav bar, scrollable. */
+  #civicrm-menu {
+    position: fixed !important;
+    top: 50px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    max-height: calc(100vh - 50px);
+    max-height: calc(100dvh - 50px);
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+  }
+  /* Submenus expand inline (accordion) instead of floating off to the side. */
+  #civicrm-menu ul {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    max-height: none !important;
+    box-sizing: border-box;
+  }
+  #civicrm-menu li {
+    float: none !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  #civicrm-menu li a {
+    white-space: normal !important;
+    text-align: left !important;
+    min-height: 44px;
+  }
+  /* SmartMenus scroll arrows are meaningless in a scrollable accordion. */
+  .sm-civicrm .scroll-up,
+  .sm-civicrm .scroll-down {
+    display: none !important;
+  }
+  #crm-qsearch-input {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
   /* Hide Drupal toolbar-tab (user account tray) on mobile — it appears above
      CRM content and serves no useful purpose on small screens. */
   .toolbar-tab {
@@ -534,9 +600,57 @@ a.shortcut-action.shortcut-action--add {
     --crm-page-padding: 0 !important;
   }
 
+  /* Hamburger on the far right; theme toggle sits just left of it.
+     crm.drupal8.js may set inline left/width on the button, so override. */
+  /* Drupal's vertical admin toolbar (tray open) pads/margins the body by
+     240px, pushing the page off-screen on phones. Cancel it on mobile. */
+  body.toolbar-vertical.toolbar-tray-open,
+  body.toolbar-vertical {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+  /* Reserve room for the fixed 50px nav bar (Drupal's inline padding-top is 0). */
+  body.crm-menubar-visible {
+    padding-top: 56px !important;
+  }
+  /* Page title shares the nav bar row (left of the toggle + hamburger). */
+  body.crm-menubar-visible .page-title {
+    position: fixed !important;
+    top: 0;
+    left: 14px;
+    max-width: calc(100% - 140px);
+    height: 50px;
+    margin: 0 !important;
+    line-height: 50px !important;
+    font-size: 1.2rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 100001;
+    pointer-events: none;
+  }
+  #toolbar-administration,
+  #toolbar-administration .toolbar-tray {
+    display: none !important;
+  }
+
+  /* Something (Drupal toolbar offset) shifts the nav right by ~240px on
+     mobile; pin it to the viewport edges. */
+  nav#civicrm-menu-nav {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    transform: none !important;
+  }
   nav#civicrm-menu-nav .crm-menubar-toggle-btn {
-	  margin-top: 5px;
-    padding-right: 10px;
+    position: absolute !important;
+    top: 6px !important;   /* 6 + 38/2 = 25 = centre of the 50px bar */
+    right: 8px !important;
+    left: auto !important;
+    width: 57px !important;
+    margin: 0 !important;
+    padding-right: 0;
   }
 
   /* btn-slide dropdowns (e.g. Configure/Participants on event manage) —
@@ -1264,7 +1378,98 @@ html[data-riveredge-theme="light"] .crm-content-block {
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 @media (max-width: 767px) {
   :root {
-    --crm-contact-image-top: 80px;
+    --crm-contact-image-top: 14px;    /* top-right of the name header */
+    --crm-contact-image-right: 12px;
+    --crm-contact-image-size: 64px;
+  }
+  /* Keep a long name from running under the photo. */
+  .crm-summary-contactname-block {
+    padding-right: 84px;
+    box-sizing: border-box;
+  }
+
+  /* Actions dropdown: full-width, single column, scrollable. JS sets top. */
+  #crm-contact-actions-list {
+    position: fixed !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 100002;
+    box-sizing: border-box;
+  }
+  #crm-contact-actions-list .crm-contact-actions-list-inner {
+    grid-template-columns: 1fr !important;
+  }
+  #crm-contact-actions-list .crm-contact_print-list {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+  #crm-contact-actions-list ul a {
+    padding: 8px 6px;
+  }
+
+  /* Contact tab button shares the Actions / Edit row — compact the ribbon
+     so all three fit on one line on a phone. */
+  .crm-container .crm-actions-ribbon ul#actions {
+    flex-wrap: nowrap;
+    gap: 6px;
+    align-items: stretch;
+  }
+  .crm-actions-ribbon ul#actions #crm-contact-actions-link,
+  .crm-actions-ribbon ul#actions a.button.edit {
+    font-size: 0.9rem !important;
+    height: 44px !important;
+    box-sizing: border-box !important;
+    padding: 0 0.65rem !important;
+    display: inline-flex !important;
+    align-items: center;
+    white-space: nowrap;
+  }
+  /* The tab button is absolutely filled into its <li>, so it adds no height
+     of its own — the row height comes from the Actions / Edit buttons. */
+  .crm-actions-ribbon ul#actions > li.riveredge-tab-bar-li {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    position: relative;
+    align-self: flex-start;
+    height: 44px;
+    margin: 0;
+    padding: 0;
+  }
+  .riveredge-tab-bar.riveredge-tab-bar-inline {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+  }
+  .riveredge-tab-bar-inline .riveredge-tab-btn {
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .riveredge-tab-bar-inline .riveredge-tab-current {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .riveredge-tab-bar.riveredge-tab-bar-inline {
+    border-bottom: none;
+    width: 100%;
+  }
+  .riveredge-tab-bar-inline .riveredge-tab-btn {
+    min-height: 0;
+    height: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--crm-btn-radius, 4px);
+  }
+  .riveredge-tab-bar-inline .riveredge-tab-hamburger {
+    display: none;
   }
 }
 
@@ -1351,4 +1556,46 @@ html[data-riveredge-theme="dark"] ul.crm-quickSearch-results a {
 }
 html[data-riveredge-theme="dark"] ul.crm-quickSearch-results .ui-state-active {
   background: #3a3f58;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   12. Mobile nav bar + menu panel — light mode
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (max-width: 767px) {
+  html[data-riveredge-theme="light"] body #civicrm-menu-nav {
+    background-color: #e8eef0 !important;
+  }
+  html[data-riveredge-theme="light"] body #civicrm-menu-nav .crm-menubar-toggle-btn {
+    background-color: transparent !important;
+  }
+  html[data-riveredge-theme="light"] body #civicrm-menu-nav .crm-menubar-toggle-btn-icon,
+  html[data-riveredge-theme="light"] body #civicrm-menu-nav .crm-menubar-toggle-btn-icon:before,
+  html[data-riveredge-theme="light"] body #civicrm-menu-nav .crm-menubar-toggle-btn-icon:after {
+    background: #3a4150;
+  }
+  html[data-riveredge-theme="light"] body #riveredge-theme-toggle {
+    background: #fff !important;
+    color: #222831 !important;
+    border-color: rgba(0, 0, 0, 0.25) !important;
+  }
+  html[data-riveredge-theme="light"] body #civicrm-menu,
+  html[data-riveredge-theme="light"] body #civicrm-menu ul {
+    background-color: #f4f7f8 !important;
+    border-bottom-color: #cfd8dc !important;
+  }
+  html[data-riveredge-theme="light"] body #civicrm-menu ul ul {
+    background-color: #e8eef0 !important;
+  }
+  html[data-riveredge-theme="light"] body #civicrm-menu li a {
+    background-color: transparent !important;
+    color: #222831 !important;
+  }
+  html[data-riveredge-theme="light"] body #civicrm-menu li a:hover,
+  html[data-riveredge-theme="light"] body #civicrm-menu li a:focus,
+  html[data-riveredge-theme="light"] body #civicrm-menu li a.highlighted {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+  }
+  html[data-riveredge-theme="light"] body #civicrm-menu li .sub-arrow:before {
+    color: #555;
+  }
 }
